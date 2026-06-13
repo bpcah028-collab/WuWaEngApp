@@ -1,0 +1,1777 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>鳴潮 English Blank Quiz v3</title>
+  <style>
+    :root {
+      --bg: #070814;
+      --panel: rgba(14, 18, 38, 0.92);
+      --panel-2: rgba(20, 27, 56, 0.86);
+      --text: #eef7ff;
+      --muted: #9db2c9;
+      --cyan: #00f5ff;
+      --pink: #ff2bd6;
+      --yellow: #ffe75e;
+      --green: #44ff9a;
+      --red: #ff4d6d;
+      --border: rgba(0, 245, 255, 0.35);
+      --shadow-cyan: 0 0 18px rgba(0, 245, 255, 0.35);
+      --shadow-pink: 0 0 18px rgba(255, 43, 214, 0.25);
+      --radius: 18px;
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif;
+      background:
+        radial-gradient(circle at 20% -10%, rgba(255, 43, 214, 0.28), transparent 35%),
+        radial-gradient(circle at 90% 10%, rgba(0, 245, 255, 0.22), transparent 32%),
+        linear-gradient(160deg, #070814 0%, #0b1024 45%, #13051b 100%);
+      overflow-x: hidden;
+      touch-action: manipulation;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255, 255, 255, 0.035) 0px,
+          rgba(255, 255, 255, 0.035) 1px,
+          transparent 2px,
+          transparent 6px
+        );
+      mix-blend-mode: screen;
+      opacity: 0.28;
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: none;
+      color: var(--text);
+      border-radius: 14px;
+      min-height: 48px;
+      padding: 12px 14px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+      transition: transform 0.08s ease, filter 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    button:active {
+      transform: translateY(1px) scale(0.99);
+      filter: brightness(1.12);
+    }
+
+    button:disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+      filter: grayscale(0.4);
+    }
+
+    .app {
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 16px 14px calc(22px + var(--safe-bottom));
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      padding: 18px;
+      margin: 4px 0 14px;
+      background:
+        linear-gradient(135deg, rgba(0, 245, 255, 0.14), rgba(255, 43, 214, 0.12)),
+        rgba(11, 15, 34, 0.92);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-cyan), var(--shadow-pink);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -30px;
+      top: -45px;
+      width: 140px;
+      height: 140px;
+      border: 1px solid rgba(255, 231, 94, 0.18);
+      transform: rotate(32deg);
+      box-shadow: 0 0 32px rgba(255, 231, 94, 0.12);
+    }
+
+    .kicker {
+      margin: 0 0 6px;
+      color: var(--cyan);
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(24px, 7vw, 36px);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      text-shadow: 0 0 14px rgba(0, 245, 255, 0.4);
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 14px;
+    }
+
+    .global-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .btn-primary {
+      background:
+        linear-gradient(135deg, rgba(0, 245, 255, 0.26), rgba(0, 245, 255, 0.08)),
+        rgba(0, 245, 255, 0.08);
+      color: #f7feff;
+      box-shadow: inset 0 0 0 1px rgba(0, 245, 255, 0.45), 0 0 18px rgba(0, 245, 255, 0.18);
+      font-weight: 800;
+    }
+
+    .btn-secondary {
+      background:
+        linear-gradient(135deg, rgba(255, 43, 214, 0.22), rgba(255, 43, 214, 0.08)),
+        rgba(255, 43, 214, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(255, 43, 214, 0.42), 0 0 18px rgba(255, 43, 214, 0.16);
+      font-weight: 800;
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.07);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.11);
+    }
+
+    .btn-correct {
+      background: linear-gradient(135deg, rgba(68, 255, 154, 0.3), rgba(68, 255, 154, 0.12));
+      box-shadow: inset 0 0 0 1px rgba(68, 255, 154, 0.55), 0 0 18px rgba(68, 255, 154, 0.16);
+      color: #f5fff9;
+      font-weight: 900;
+    }
+
+    .btn-wrong {
+      background: linear-gradient(135deg, rgba(255, 77, 109, 0.32), rgba(255, 77, 109, 0.12));
+      box-shadow: inset 0 0 0 1px rgba(255, 77, 109, 0.58), 0 0 18px rgba(255, 77, 109, 0.16);
+      color: #fff7f8;
+      font-weight: 900;
+    }
+
+    .section-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .section-card,
+    .quiz-card,
+    .result-card {
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent),
+        var(--panel);
+      border: 1px solid rgba(0, 245, 255, 0.22);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.34);
+      overflow: hidden;
+    }
+
+    .section-card {
+      padding: 14px;
+    }
+
+    .section-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-range {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .status-pill {
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 30px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--yellow);
+      background: rgba(255, 231, 94, 0.08);
+      box-shadow: inset 0 0 0 1px rgba(255, 231, 94, 0.28);
+      white-space: nowrap;
+      font-weight: 800;
+    }
+
+    .section-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .mini-stats {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 10px 0 12px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--muted);
+      font-size: 12px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      margin: -2px -4px 12px;
+      padding: 10px 4px;
+      background: linear-gradient(180deg, rgba(7, 8, 20, 0.96), rgba(7, 8, 20, 0.72), transparent);
+      backdrop-filter: blur(10px);
+    }
+
+    .home-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .quiz-card {
+      padding: 16px;
+    }
+
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .progress-wrap {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 0%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--cyan), var(--pink));
+      box-shadow: 0 0 14px rgba(0, 245, 255, 0.35);
+      transition: width 0.22s ease;
+    }
+
+    .hint-label,
+    .phrase-label,
+    .answer-label {
+      margin: 0 0 7px;
+      color: var(--cyan);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .hint {
+      margin: 0 0 16px;
+      padding: 13px;
+      border-radius: 14px;
+      background: rgba(0, 245, 255, 0.07);
+      color: #dffcff;
+      line-height: 1.6;
+      border: 1px solid rgba(0, 245, 255, 0.18);
+    }
+
+    .phrase {
+      margin: 0;
+      padding: 16px;
+      border-radius: 16px;
+      background:
+        linear-gradient(135deg, rgba(255, 43, 214, 0.11), rgba(0, 245, 255, 0.07)),
+        rgba(255, 255, 255, 0.06);
+      color: #ffffff;
+      font-size: clamp(22px, 6.2vw, 30px);
+      line-height: 1.38;
+      letter-spacing: -0.02em;
+      font-weight: 850;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      word-break: normal;
+    }
+
+    .blank {
+      color: var(--yellow);
+      text-shadow: 0 0 14px rgba(255, 231, 94, 0.45);
+      white-space: nowrap;
+    }
+
+    .answer-box {
+      margin-top: 16px;
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(68, 255, 154, 0.08);
+      border: 1px solid rgba(68, 255, 154, 0.22);
+    }
+
+    .answer-word {
+      font-size: 30px;
+      font-weight: 950;
+      letter-spacing: -0.04em;
+      color: var(--green);
+      text-shadow: 0 0 14px rgba(68, 255, 154, 0.34);
+      margin: 0 0 10px;
+    }
+
+    .full-phrase {
+      margin: 0;
+      color: #effff6;
+      line-height: 1.5;
+      font-size: 18px;
+      font-weight: 750;
+    }
+
+    .translation-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255, 231, 94, 0.075);
+      border: 1px solid rgba(255, 231, 94, 0.2);
+    }
+
+    .translation-label {
+      margin: 0 0 6px;
+      color: var(--yellow);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .translation-text {
+      margin: 0;
+      color: #fff8c7;
+      line-height: 1.55;
+      font-size: 15px;
+      font-weight: 650;
+    }
+
+    .reveal-wrap {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .speech-panel {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .speech-title {
+      margin: 0 0 9px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .rate-toggle {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-bottom: 9px;
+    }
+
+    @media (min-width: 380px) {
+      .rate-toggle {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+    }
+
+    .rate-btn {
+      min-height: 42px;
+      padding: 9px 10px;
+      color: var(--muted);
+    }
+
+    .rate-btn.active {
+      color: var(--text);
+      background: rgba(0, 245, 255, 0.14);
+      box-shadow: inset 0 0 0 1px rgba(0, 245, 255, 0.48), 0 0 14px rgba(0, 245, 255, 0.12);
+    }
+
+    .speech-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .judge-bar {
+      position: sticky;
+      bottom: 0;
+      z-index: 30;
+      margin: 16px -14px calc(-22px - var(--safe-bottom));
+      padding: 12px 14px calc(12px + var(--safe-bottom));
+      background: linear-gradient(180deg, transparent, rgba(7, 8, 20, 0.92) 22%, rgba(7, 8, 20, 0.98));
+      backdrop-filter: blur(12px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .judge-bar button {
+      min-height: 62px;
+      font-size: 18px;
+      border-radius: 18px;
+    }
+
+    .result-card {
+      padding: 18px;
+      text-align: center;
+    }
+
+    .result-card h2 {
+      margin: 0 0 10px;
+      font-size: 28px;
+      letter-spacing: -0.04em;
+    }
+
+    .result-score {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .score-box {
+      padding: 14px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+    }
+
+    .score-num {
+      display: block;
+      font-size: 30px;
+      font-weight: 950;
+      margin-bottom: 3px;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(18px + var(--safe-bottom));
+      transform: translateX(-50%) translateY(16px);
+      width: calc(100% - 32px);
+      max-width: 520px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(8, 12, 26, 0.96);
+      border: 1px solid rgba(0, 245, 255, 0.32);
+      color: var(--text);
+      box-shadow: var(--shadow-cyan);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+      z-index: 50;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+
+    .manager-card {
+      padding: 16px;
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent),
+        var(--panel);
+      border: 1px solid rgba(255, 43, 214, 0.25);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.34);
+      margin-top: 12px;
+    }
+
+    .manager-card h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .manager-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    .textarea {
+      width: 100%;
+      min-height: 230px;
+      resize: vertical;
+      margin-top: 12px;
+      padding: 13px;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 245, 255, 0.25);
+      background: rgba(5, 8, 19, 0.88);
+      color: var(--text);
+      font: 14px/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      outline: none;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+    }
+
+    .textarea:focus {
+      border-color: rgba(0, 245, 255, 0.65);
+      box-shadow: inset 0 0 0 1px rgba(0, 245, 255, 0.22), var(--shadow-cyan);
+    }
+
+    .manager-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 9px;
+      margin-top: 12px;
+    }
+
+    .preview-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .preview-item {
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.055);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .preview-item strong {
+      color: var(--cyan);
+    }
+
+    .preview-item.skip {
+      opacity: 0.66;
+      border-color: rgba(255, 231, 94, 0.22);
+    }
+
+    .format-box {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(0, 245, 255, 0.06);
+      border: 1px solid rgba(0, 245, 255, 0.18);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .format-box code {
+      color: var(--yellow);
+      word-break: break-word;
+    }
+
+    .footer-note {
+      margin: 16px 2px 0;
+      color: rgba(238, 247, 255, 0.55);
+      font-size: 12px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .empty-box {
+      padding: 16px;
+      border-radius: 16px;
+      background: rgba(255, 231, 94, 0.08);
+      border: 1px solid rgba(255, 231, 94, 0.22);
+      color: #fff8c7;
+      line-height: 1.6;
+      margin: 12px 0;
+    }
+
+    @media (min-width: 520px) {
+      .global-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+<script type="text/javascript" nonce="eb9796790f1e42f8a7bebcec3c1" src="//local.adguard.org?ts=1781307992288&amp;type=content-script&amp;dmn=chatgpt.com&amp;url=https%3A%2F%2Fchatgpt.com%2Fbackend-api%2Festuary%2Fcontent%3Fid%3Dfile_0000000037e8720bbaaa2303839dfc90%26fn%3Dindex%25281%2529.html%26cd%3Dattachment%26ts%3D494808%26p%3Dfs%26cid%3D1%26sig%3D7e019efa85144178790453edca7f8616a8fc130c621db36311a4caab484c4c31%26v%3D0&amp;app=chrome.exe&amp;css=2&amp;js=1&amp;rel=1&amp;rji=1&amp;sbe=0"></script><script type="text/javascript" nonce="eb9796790f1e42f8a7bebcec3c1" src="//local.adguard.org?ts=1781307992288&amp;name=AdGuard%20Extra&amp;name=AdGuard%20Popup%20Blocker&amp;type=user-script"></script></head>
+<body>
+  <main id="app" class="app"></main>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = "ww_english_blank_quiz_progress_v1";
+    const BLANK_REGEX = /\(\s*_{3,}\s*\)/;
+    const START_BLANK_REGEX = /^\s*\(\s*_{3,}\s*\)/;
+
+    const BASE_WORDS = [
+      { id: 1, word: "impressive", ja: "印象的な / すごい", phrase: "The most ( _____ ) thing was the crowd.", translation: "一番印象的だったのは、人の多さでした。" },
+      { id: 2, word: "realized", ja: "気づいた / 実感した", phrase: "That's when I ( _____ ) how many people love this game.", translation: "その時、このゲームを愛している人がどれだけ多いか実感しました。" },
+      { id: 3, word: "thanks", ja: "ありがとう / 感謝", phrase: "( _____ ) for the stream; you made my day.", translation: "配信ありがとう。いい一日になりました。" },
+      { id: 4, word: "reaction", ja: "リアクション / 反応", phrase: "Your ( _____ ) was awesome.", translation: "あなたのリアクションは最高でした。" },
+      { id: 5, word: "archive", ja: "アーカイブ / 録画", phrase: "I watched the whole ( _____ ) after work.", translation: "仕事の後にアーカイブを全部見ました。" },
+      { id: 6, word: "collab", ja: "コラボ", phrase: "This ( _____ ) story was a 10/10.", translation: "このコラボストーリーは10点満点でした。" },
+      { id: 7, word: "bro", ja: "兄弟 / 親しい呼びかけ", phrase: "I'll keep watching from JP, ( _____ ).", translation: "これからも日本から見続けるよ、bro。" },
+      { id: 8, word: "vibe", ja: "雰囲気 / ノリ", phrase: "The ( _____ ) at the event was amazing.", translation: "イベントの雰囲気は素晴らしかったです。" },
+      { id: 9, word: "booth", ja: "ブース", phrase: "Every ( _____ ) had a huge line.", translation: "どのブースにも長い列ができていました。" },
+      { id: 10, word: "stage", ja: "ステージ", phrase: "The main ( _____ ) was packed.", translation: "メインステージは人でいっぱいでした。" },
+
+      { id: 11, word: "banner", ja: "ガチャのピックアップ / バナー", phrase: "I want to pull on the next ( _____ ).", translation: "次のバナーでガチャを引きたいです。" },
+      { id: 12, word: "pull", ja: "ガチャを引くこと / 1回の引き", phrase: "I got her on my first ( _____ ).", translation: "最初の1回で彼女を引けました。" },
+      { id: 13, word: "pity", ja: "天井カウント / pity", phrase: "I am close to ( _____ ).", translation: "もうすぐ天井です。" },
+      { id: 14, word: "guarantee", ja: "確定 / すり抜け後の保証", phrase: "I have a ( _____ ) for the next character.", translation: "次のキャラクターは確定で引けます。" },
+      { id: 15, word: "astrite", ja: "星声 / ガチャ石", phrase: "I need more ( _____ ) before the banner ends.", translation: "バナーが終わる前にもっと星声が必要です。" },
+      { id: 16, word: "weapon", ja: "武器", phrase: "The signature ( _____ ) looks insane.", translation: "モチーフ武器がとんでもなく強そうです。" },
+      { id: 17, word: "duplicate", ja: "被り / 重複", phrase: "I got a ( _____ ), but it's still useful.", translation: "被ったけど、それでも役に立ちます。" },
+      { id: 18, word: "rate", ja: "確率 / 排出率", phrase: "The drop ( _____ ) feels rough today.", translation: "今日は排出率がかなり渋く感じます。" },
+      { id: 19, word: "luck", ja: "運", phrase: "My gacha ( _____ ) is finally back.", translation: "ガチャ運がついに戻ってきました。" },
+      { id: 20, word: "save", ja: "貯める / 温存する", phrase: "I should ( _____ ) for my favorite character.", translation: "推しキャラのために貯めるべきです。" },
+
+      { id: 21, word: "dodge", ja: "回避する", phrase: "You have to ( _____ ) at the right timing.", translation: "正しいタイミングで回避しないといけません。" },
+      { id: 22, word: "parry", ja: "パリィする / 受け流す", phrase: "This boss is easier if you ( _____ ) correctly.", translation: "このボスは、正しくパリィできれば楽になります。" },
+      { id: 23, word: "combo", ja: "コンボ / 連携", phrase: "Her attack ( _____ ) feels smooth.", translation: "彼女の攻撃コンボはなめらかです。" },
+      { id: 24, word: "damage", ja: "ダメージ", phrase: "This build does a lot of ( _____ ).", translation: "このビルドは大きなダメージを出します。" },
+      { id: 25, word: "rotation", ja: "ローテーション / 動かし方", phrase: "I need to practice this team ( _____ ).", translation: "このチームのローテーションを練習する必要があります。" },
+      { id: 26, word: "healer", ja: "ヒーラー / 回復役", phrase: "I need a ( _____ ) for this fight.", translation: "この戦闘にはヒーラーが必要です。" },
+      { id: 27, word: "stamina", ja: "スタミナ", phrase: "I'm out of ( _____ ) again.", translation: "またスタミナが切れました。" },
+      { id: 28, word: "cooldown", ja: "クールダウン / 再使用待ち", phrase: "My skill is still on ( _____ ).", translation: "スキルはまだクールダウン中です。" },
+      { id: 29, word: "challenge", ja: "チャレンジ / 高難度イベント", phrase: "This event ( _____ ) was harder than I expected.", translation: "このイベントチャレンジは思ったより難しかったです。" },
+      { id: 30, word: "clear", ja: "クリアする", phrase: "( _____ ) the stage before the timer runs out.", translation: "タイマーが切れる前にステージをクリアしてください。" },
+
+      { id: 31, word: "echo", ja: "音骸 / Echo", phrase: "I got a good ( _____ ) from that boss.", translation: "あのボスから良い音骸を手に入れました。" },
+      { id: 32, word: "substat", ja: "サブステータス", phrase: "The ( _____ ) rolls were terrible.", translation: "サブステータスの伸びがひどかったです。" },
+      { id: 33, word: "upgrade", ja: "強化する / アップグレード", phrase: "Should I ( _____ ) this piece?", translation: "この装備を強化するべきですか？" },
+      { id: 34, word: "farm", ja: "周回する / 素材を集める", phrase: "I need to ( _____ ) tacet fields today.", translation: "今日は無音区を周回しないといけません。" },
+      { id: 35, word: "material", ja: "素材", phrase: "I am missing one ( _____ ) for ascension.", translation: "突破に必要な素材が1つ足りません。" },
+      { id: 36, word: "ascension", ja: "突破 / 昇格", phrase: "Her next ( _____ ) needs rare drops.", translation: "彼女の次の突破にはレアドロップが必要です。" },
+      { id: 37, word: "forte", ja: "共鳴回路 / Forte", phrase: "I still don't understand this ( _____ ) priority.", translation: "この共鳴回路の優先度がまだ分かりません。" },
+      { id: 38, word: "build", ja: "ビルド / 育成構成", phrase: "Can you check my ( _____ )?", translation: "私のビルドを確認してくれますか？" },
+      { id: 39, word: "energy", ja: "エネルギー / 共鳴効率", phrase: "This character needs more ( _____ ) recharge.", translation: "このキャラクターにはもっとエネルギー回復が必要です。" },
+      { id: 40, word: "crit", ja: "会心 / クリティカル", phrase: "I want more ( _____ ) rate on my echoes.", translation: "音骸にもっと会心率が欲しいです。" },
+
+      { id: 41, word: "story", ja: "ストーリー", phrase: "The main ( _____ ) really moved me.", translation: "メインストーリーは本当に感動しました。" },
+      { id: 42, word: "character", ja: "キャラクター", phrase: "This ( _____ ) is my favorite.", translation: "このキャラクターが私の推しです。" },
+      { id: 43, word: "cutscene", ja: "ムービー / カットシーン", phrase: "That ( _____ ) gave me chills.", translation: "あのカットシーンには鳥肌が立ちました。" },
+      { id: 44, word: "soundtrack", ja: "音楽 / サントラ", phrase: "The ( _____ ) in this scene is perfect.", translation: "この場面の音楽は完璧です。" },
+      { id: 45, word: "quest", ja: "クエスト", phrase: "I haven't finished that side ( _____ ) yet.", translation: "そのサイドクエストはまだ終わっていません。" },
+      { id: 46, word: "spoiler", ja: "ネタバレ", phrase: "No ( _____ ), please.", translation: "ネタバレはやめてください。" },
+      { id: 47, word: "screenshot", ja: "スクリーンショット", phrase: "Let me take a ( _____ ) first.", translation: "先にスクリーンショットを撮らせてください。" },
+      { id: 48, word: "cosplay", ja: "コスプレ", phrase: "The ( _____ ) looked just like the game.", translation: "そのコスプレはゲームそのものでした。" },
+      { id: 49, word: "theory", ja: "考察 / 仮説", phrase: "I have a wild ( _____ ) about the next patch.", translation: "次のパッチについて、かなり大胆な考察があります。" },
+      { id: 50, word: "friendship", ja: "友情 / つながり", phrase: "I hope we can build a real ( _____ ) through this game.", translation: "このゲームを通じて本当の友情を築けたらいいなと思います。" }
+    ];
+
+    const BUILT_IN_EXTRA_WORDS = [
+      {
+            "word": "blast",
+            "ja": "めちゃくちゃ楽しかった",
+            "phrase": "I had a ( _____ ).",
+            "translation": "めちゃくちゃ楽しかったです。",
+            "source": "英語部 Day1-10 / 感情・リアクション"
+      },
+      {
+            "word": "way",
+            "ja": "マジか",
+            "phrase": "No ( _____ ).",
+            "translation": "マジか。",
+            "source": "英語部 Day1-10 / 感情・リアクション"
+      },
+      {
+            "word": "god",
+            "ja": "うわ、マジか",
+            "phrase": "Oh my ( _____ ).",
+            "translation": "うわ、マジか。",
+            "source": "英語部 Day1-10 / 感情・リアクション"
+      },
+      {
+            "word": "hold",
+            "ja": "ちょっと待って",
+            "phrase": "( _____ ) on.",
+            "translation": "ちょっと待って。",
+            "source": "英語部 Day1-10 / 感情・リアクション"
+      },
+      {
+            "word": "believe",
+            "ja": "信じられなかった",
+            "phrase": "I couldn't ( _____ ) it.",
+            "translation": "信じられませんでした。",
+            "source": "英語部 Day1-10 / 感情・リアクション"
+      },
+      {
+            "word": "insane",
+            "ja": "ヤバすぎる",
+            "phrase": "That's ( _____ ).",
+            "translation": "それはヤバすぎます。",
+            "source": "英語部 Day1-10 / 感情・リアクション"
+      },
+      {
+            "word": "detail",
+            "ja": "作り込みがすごい",
+            "phrase": "That's a nice ( _____ ).",
+            "translation": "作り込みがすごいです。",
+            "source": "英語部 Day1-10 / 感情・リアクション"
+      },
+      {
+            "word": "notice",
+            "ja": "そこ気付かなかった",
+            "phrase": "I didn't ( _____ ) that.",
+            "translation": "そこには気付きませんでした。",
+            "source": "英語部 Day1-10 / 感情・リアクション"
+      },
+      {
+            "word": "special",
+            "ja": "特別な感じがした",
+            "phrase": "It felt ( _____ ).",
+            "translation": "特別な感じがしました。",
+            "source": "英語部 Day1-10 / 感情・リアクション"
+      },
+      {
+            "word": "day",
+            "ja": "最高の一日になった",
+            "phrase": "It totally made my ( _____ ).",
+            "translation": "最高の一日になりました。",
+            "source": "英語部 Day1-10 / 感情・リアクション"
+      },
+      {
+            "word": "day",
+            "ja": "そんな経験そうそうない",
+            "phrase": "Stuff like that doesn't happen every ( _____ ).",
+            "translation": "そんな経験はそうそうありません。",
+            "source": "英語部 Day1-10 / 感情・リアクション"
+      },
+      {
+            "word": "moved",
+            "ja": "彼女のストーリーに感動した",
+            "phrase": "Her story really ( _____ ) me.",
+            "translation": "彼女のストーリーに本当に感動しました。",
+            "source": "英語部 Day1-10 / 感動・ストーリー"
+      },
+      {
+            "word": "in",
+            "ja": "ストーリーに引き込まれた",
+            "phrase": "The story really drew me ( _____ ).",
+            "translation": "そのストーリーに本当に引き込まれました。",
+            "source": "英語部 Day1-10 / 感動・ストーリー"
+      },
+      {
+            "word": "honest",
+            "ja": "正直、本当に泣いた",
+            "phrase": "To be ( _____ ), I actually cried.",
+            "translation": "正直、本当に泣きました。",
+            "source": "英語部 Day1-10 / 感動・ストーリー"
+      },
+      {
+            "word": "day",
+            "ja": "この前さ",
+            "phrase": "So the other ( _____ )...",
+            "translation": "この前さ……。",
+            "source": "英語部 Day1-10 / イベント・体験談"
+      },
+      {
+            "word": "saw",
+            "ja": "最初に目に入ったのは〜だった",
+            "phrase": "The first thing I ( _____ ) was...",
+            "translation": "最初に目に入ったのは〜でした。",
+            "source": "英語部 Day1-10 / イベント・体験談"
+      },
+      {
+            "word": "like",
+            "ja": "まさに〜そのものだった",
+            "phrase": "It looked exactly ( _____ )...",
+            "translation": "まさに〜そのものに見えました。",
+            "source": "英語部 Day1-10 / イベント・体験談"
+      },
+      {
+            "word": "bigger",
+            "ja": "思ったよりずっと大きかった",
+            "phrase": "It was much ( _____ ) than I expected.",
+            "translation": "思ったよりずっと大きかったです。",
+            "source": "英語部 Day1-10 / イベント・体験談"
+      },
+      {
+            "word": "pictures",
+            "ja": "写真をたくさん撮った",
+            "phrase": "I took a lot of ( _____ ).",
+            "translation": "写真をたくさん撮りました。",
+            "source": "英語部 Day1-10 / イベント・体験談"
+      },
+      {
+            "word": "happy",
+            "ja": "みんな本当に楽しそうだった",
+            "phrase": "Everyone looked so ( _____ ).",
+            "translation": "みんな本当に楽しそうでした。",
+            "source": "英語部 Day1-10 / イベント・体験談"
+      },
+      {
+            "word": "people",
+            "ja": "人がめちゃくちゃ多かった",
+            "phrase": "There were so many ( _____ ).",
+            "translation": "人がめちゃくちゃ多かったです。",
+            "source": "英語部 Day1-10 / イベント・体験談"
+      },
+      {
+            "word": "long",
+            "ja": "行列がめちゃくちゃ長かった",
+            "phrase": "The line was so ( _____ ).",
+            "translation": "行列がめちゃくちゃ長かったです。",
+            "source": "英語部 Day1-10 / イベント・体験談"
+      },
+      {
+            "word": "up",
+            "ja": "だから諦めた",
+            "phrase": "So I gave ( _____ ).",
+            "translation": "だから諦めました。",
+            "source": "英語部 Day1-10 / イベント・体験談"
+      },
+      {
+            "word": "venue",
+            "ja": "会場を見て回った",
+            "phrase": "I walked around the ( _____ ).",
+            "translation": "会場を見て回りました。",
+            "source": "英語部 Day1-10 / イベント・体験談"
+      },
+      {
+            "word": "everything",
+            "ja": "全部見たかった",
+            "phrase": "I wanted to see ( _____ ).",
+            "translation": "全部見たかったです。",
+            "source": "英語部 Day1-10 / イベント・体験談"
+      },
+      {
+            "word": "favorite",
+            "ja": "一番好きなキャラは誰？",
+            "phrase": "Who is your ( _____ ) character?",
+            "translation": "一番好きなキャラは誰ですか？",
+            "source": "英語部 Day1-10 / 海外勢との雑談"
+      },
+      {
+            "word": "favorite",
+            "ja": "一番好きなキャラはエイメスです",
+            "phrase": "My ( _____ ) character is Aymes.",
+            "translation": "一番好きなキャラはエイメスです。",
+            "source": "英語部 Day1-10 / 海外勢との雑談"
+      },
+      {
+            "word": "launch",
+            "ja": "リリース初日からプレイしている",
+            "phrase": "I started playing Wuthering Waves on ( _____ ) day.",
+            "translation": "鳴潮をリリース初日からプレイしています。",
+            "source": "英語部 Day1-10 / 海外勢との雑談"
+      },
+      {
+            "word": "version",
+            "ja": "1.1頃から本格的にハマった",
+            "phrase": "I really got into the game around ( _____ ) 1.1.",
+            "translation": "バージョン1.1頃から本格的にハマりました。",
+            "source": "英語部 Day1-10 / 海外勢との雑談"
+      },
+      {
+            "word": "saving",
+            "ja": "ルシラのために石を貯めている",
+            "phrase": "I'm ( _____ ) for Lucilla.",
+            "translation": "ルシラのために石を貯めています。",
+            "source": "英語部 Day1-10 / 海外勢との雑談"
+      },
+      {
+            "word": "stop",
+            "ja": "基本S0R1で止める",
+            "phrase": "I usually ( _____ ) at S0R1.",
+            "translation": "基本的にはS0R1で止めます。",
+            "source": "英語部 Day1-10 / 海外勢との雑談"
+      },
+      {
+            "word": "content",
+            "ja": "エンドコンテンツは全部クリアしている",
+            "phrase": "I've cleared all the endgame ( _____ ).",
+            "translation": "エンドコンテンツは全部クリアしています。",
+            "source": "英語部 Day1-10 / 海外勢との雑談"
+      },
+      {
+            "word": "characters",
+            "ja": "コスプレイヤーはゲームキャラそっくりだった",
+            "phrase": "The cosplayers looked just like the game ( _____ ).",
+            "translation": "コスプレイヤーはゲームキャラそっくりでした。",
+            "source": "英語部 Day1-10 / コスプレ・展示物"
+      },
+      {
+            "word": "cosplayer",
+            "ja": "エイメスのコスプレイヤーはエイメスそっくりだった",
+            "phrase": "The ( _____ ) looked just like Aymes.",
+            "translation": "そのコスプレイヤーはエイメスそっくりでした。",
+            "source": "英語部 Day1-10 / コスプレ・展示物"
+      },
+      {
+            "word": "recreation",
+            "ja": "再現度がすごかった",
+            "phrase": "The ( _____ ) was amazing.",
+            "translation": "再現度がすごかったです。",
+            "source": "英語部 Day1-10 / コスプレ・展示物"
+      },
+      {
+            "word": "ceiling",
+            "ja": "天井から吊るされていた",
+            "phrase": "It was hanging from the ( _____ ).",
+            "translation": "天井から吊るされていました。",
+            "source": "英語部 Day1-10 / コスプレ・展示物"
+      },
+      {
+            "word": "huge",
+            "ja": "でかい",
+            "phrase": "It's ( _____ ).",
+            "translation": "でかいです。",
+            "source": "英語部 Day1-10 / コスプレ・展示物"
+      },
+      {
+            "word": "like",
+            "ja": "〜って感じだった",
+            "phrase": "I was ( _____ )...",
+            "translation": "私は〜って感じでした。",
+            "source": "英語部 Day1-10 / モデリング重点フレーズ"
+      },
+      {
+            "word": "zone",
+            "ja": "完全に夢中だった",
+            "phrase": "I was totally in the ( _____ ).",
+            "translation": "完全に夢中でした。",
+            "source": "英語部 Day1-10 / モデリング重点フレーズ"
+      },
+      {
+            "word": "that",
+            "ja": "その後",
+            "phrase": "After ( _____ )...",
+            "translation": "その後……。",
+            "source": "英語部 Day1-10 / モデリング重点フレーズ"
+      },
+      {
+            "word": "hours",
+            "ja": "2時間並んだ",
+            "phrase": "I waited in line for two ( _____ ).",
+            "translation": "2時間並びました。",
+            "source": "英語部 Day1-10 / 今後追加したい候補"
+      },
+      {
+            "word": "wanted",
+            "ja": "欲しかったグッズを買えた",
+            "phrase": "I finally got the merchandise I ( _____ ).",
+            "translation": "欲しかったグッズをついに買えました。",
+            "source": "英語部 Day1-10 / 今後追加したい候補"
+      },
+      {
+            "word": "incredible",
+            "ja": "会場の雰囲気が最高だった",
+            "phrase": "The atmosphere was ( _____ ).",
+            "translation": "会場の雰囲気が最高でした。",
+            "source": "英語部 Day1-10 / 今後追加したい候補"
+      },
+      {
+            "word": "pictures",
+            "ja": "もっと写真を撮ればよかった",
+            "phrase": "I wish I had taken more ( _____ ).",
+            "translation": "もっと写真を撮ればよかったです。",
+            "source": "英語部 Day1-10 / 今後追加したい候補"
+      },
+      {
+            "word": "again",
+            "ja": "また行きたい",
+            "phrase": "I'd love to go ( _____ ).",
+            "translation": "また行きたいです。",
+            "source": "英語部 Day1-10 / 今後追加したい候補"
+      }
+];
+
+    const CUSTOM_STORAGE_KEY = "ww_english_blank_quiz_custom_phrases_v1";
+    const SECTION_SIZE = 10;
+
+
+    let customPhrases = loadCustomPhrases();
+    let WORDS = [];
+    let progress = loadProgress();
+    let session = null;
+    let speechRate = 1.0;
+    let toastTimer = null;
+
+    function loadProgress() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+        return normalizeProgress(saved);
+      } catch (_) {
+        return normalizeProgress(null);
+      }
+    }
+
+    function normalizeProgress(saved) {
+      saved = saved || {};
+      return {
+        weak: Array.isArray(saved.weak) ? saved.weak : [],
+        attempted: Array.isArray(saved.attempted) ? saved.attempted : [],
+        mastered: Array.isArray(saved.mastered) ? saved.mastered : []
+      };
+    }
+
+    function saveProgress() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+    }
+
+
+    function loadCustomPhrases() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(CUSTOM_STORAGE_KEY));
+        if (!Array.isArray(saved)) return [];
+        return saved
+          .filter(function(item) {
+            return item && item.word && item.phrase && item.translation;
+          })
+          .map(function(item) {
+            const normalized = normalizePhraseKey(filledPhraseFor(item));
+            return {
+              id: item.id || ("custom:" + hashString(normalized)),
+              word: String(item.word).toLowerCase(),
+              ja: item.ja || item.translation,
+              phrase: item.phrase,
+              translation: item.translation,
+              source: item.source || "カスタム追加"
+            };
+          });
+      } catch (_) {
+        return [];
+      }
+    }
+
+    function saveCustomPhrases() {
+      localStorage.setItem(CUSTOM_STORAGE_KEY, JSON.stringify(customPhrases));
+    }
+
+    function filledPhraseFor(item) {
+      const word = smartWordFor(item);
+      return String(item.phrase).replace(BLANK_REGEX, word);
+    }
+
+    function smartWordFor(item) {
+      const lower = String(item.word || "").toLowerCase();
+      if (START_BLANK_REGEX.test(String(item.phrase || ""))) {
+        return lower.charAt(0).toUpperCase() + lower.slice(1);
+      }
+      return lower;
+    }
+
+    function normalizePhraseKey(text) {
+      return String(text || "")
+        .toLowerCase()
+        .replace(/[’‘]/g, "'")
+        .replace(/[“”]/g, '"')
+        .replace(/[\u2026]/g, "...")
+        .replace(/[^a-z0-9\s']/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function hashString(text) {
+      let hash = 0;
+      const str = String(text || "");
+      for (let i = 0; i < str.length; i++) {
+        hash = ((hash << 5) - hash) + str.charCodeAt(i);
+        hash |= 0;
+      }
+      return Math.abs(hash).toString(36);
+    }
+
+    function buildWords() {
+      const result = [];
+      const seen = {};
+
+      function addItem(raw, fallbackId) {
+        const item = {
+          id: raw.id || fallbackId,
+          word: String(raw.word || "").toLowerCase(),
+          ja: raw.ja || raw.translation || "",
+          phrase: raw.phrase || "",
+          translation: raw.translation || raw.ja || "",
+          source: raw.source || "基本データ"
+        };
+        if (!item.word || !item.phrase) return;
+        const key = normalizePhraseKey(filledPhraseFor(item));
+        if (!key || seen[key]) return;
+        seen[key] = true;
+        result.push(item);
+      }
+
+      BASE_WORDS.forEach(function(item) { addItem(item, item.id); });
+      BUILT_IN_EXTRA_WORDS.forEach(function(item, index) { addItem(item, 51 + index); });
+      customPhrases.forEach(function(item) { addItem(item, item.id); });
+
+      return result;
+    }
+
+    function refreshWords() {
+      WORDS = buildWords();
+    }
+
+    function getCurrentIds() {
+      return WORDS.map(function(item) { return item.id; });
+    }
+
+    function countAttempted(items) {
+      return items.filter(function(item) { return progress.attempted.indexOf(item.id) >= 0; }).length;
+    }
+
+    function countMastered(items) {
+      return items.filter(function(item) { return progress.mastered.indexOf(item.id) >= 0; }).length;
+    }
+
+    function uniquePush(list, id) {
+      if (!list.includes(id)) list.push(id);
+    }
+
+    function removeFrom(list, id) {
+      const idx = list.indexOf(id);
+      if (idx >= 0) list.splice(idx, 1);
+    }
+
+    function markAnswer(id, isCorrect) {
+      uniquePush(progress.attempted, id);
+      if (isCorrect) {
+        uniquePush(progress.mastered, id);
+        removeFrom(progress.weak, id);
+      } else {
+        uniquePush(progress.weak, id);
+        removeFrom(progress.mastered, id);
+      }
+      saveProgress();
+    }
+
+    function sectionCount() {
+      return Math.ceil(WORDS.length / SECTION_SIZE);
+    }
+
+    function sectionItems(sectionNumber) {
+      const startIndex = (sectionNumber - 1) * SECTION_SIZE;
+      return WORDS.slice(startIndex, startIndex + SECTION_SIZE);
+    }
+
+    function weakItems(items) {
+      items = items || WORDS;
+      return items.filter(function(item) { return progress.weak.indexOf(item.id) >= 0; });
+    }
+
+    function getSectionStatus(items) {
+      const attemptedCount = countAttempted(items);
+      const weakCount = weakItems(items).length;
+      const masteredCount = countMastered(items);
+
+      if (attemptedCount === 0) return { label: "未着手", weakCount, attemptedCount, masteredCount };
+      if (masteredCount === items.length && weakCount === 0) return { label: "マスター済み ✨", weakCount, attemptedCount, masteredCount };
+      return { label: `残り苦手：${weakCount}問`, weakCount, attemptedCount, masteredCount };
+    }
+
+    function escapeHTML(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function smartWord(item) {
+      return smartWordFor(item);
+    }
+
+    function filledPhrase(item) {
+      return filledPhraseFor(item);
+    }
+
+    function maskedPhraseHTML(item) {
+      return escapeHTML(item.phrase).replace(/\(\s*_{3,}\s*\)/, '<span class="blank">( _____ )</span>');
+    }
+
+    function shuffle(items) {
+      const arr = [...items];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function renderHome() {
+      refreshWords();
+      session = null;
+
+      const total = WORDS.length;
+      const totalWeak = weakItems(WORDS).length;
+      const totalAttempted = countAttempted(WORDS);
+      const totalMastered = countMastered(WORDS);
+      const builtInAdded = total - BASE_WORDS.length - customPhrases.length;
+      const sectionNumbers = Array.from({ length: sectionCount() }, function(_, i) { return i + 1; });
+
+      document.getElementById("app").innerHTML = `
+        <section class="hero">
+          <p class="kicker">Wuthering Waves × English</p>
+          <h1>鳴潮フレーズ<br>穴埋めクイズ</h1>
+          <p class="subtitle">
+            答えを見る → 自分で⭕️/❌判定。苦手単語は端末に保存されます。
+          </p>
+        </section>
+
+        <section class="global-grid" aria-label="グローバル開始ボタン">
+          <button class="btn-primary" onclick="startRandom10()">全問からランダム10問</button>
+          <button class="btn-secondary" onclick="startAllWeak()" ${totalWeak === 0 ? "disabled" : ""}>全体の苦手のみ</button>
+        </section>
+
+        <div class="mini-stats" aria-label="全体ステータス">
+          <span class="chip">全${total}問</span>
+          <span class="chip">挑戦済み ${totalAttempted}/${total}</span>
+          <span class="chip">マスター ${totalMastered}/${total}</span>
+          <span class="chip">苦手 ${totalWeak}問</span>
+          <span class="chip">追加内蔵 ${builtInAdded}問</span>
+          <span class="chip">自分で追加 ${customPhrases.length}問</span>
+        </div>
+
+        <section class="manager-card">
+          <h2>追加フレーズ管理</h2>
+          <p>
+            今後の英語部フレーズは、<strong>[[覚えたい単語]]</strong> を付けた形で貼り付けると、重複を除外して追加できます。
+          </p>
+          <div class="manager-actions">
+            <button class="btn-secondary" onclick="renderImportManager()">追加・インポート画面を開く</button>
+          </div>
+        </section>
+
+        <section class="section-list">
+          ${sectionNumbers.map(renderSectionCard).join("")}
+        </section>
+
+        <p class="footer-note">
+          音声はブラウザ標準の Web Speech API を使用します。iPhoneでは読み上げボタンをタップして再生してください。
+        </p>
+      `;
+    }
+
+    function renderSectionCard(sectionNumber) {
+      const items = sectionItems(sectionNumber);
+      const status = getSectionStatus(items);
+      const weakCount = weakItems(items).length;
+      const startNo = (sectionNumber - 1) * SECTION_SIZE + 1;
+      const endNo = startNo + items.length - 1;
+
+      return `
+        <article class="section-card">
+          <div class="section-top">
+            <div>
+              <h2 class="section-title">Section ${sectionNumber}</h2>
+              <p class="section-range">No.${startNo}〜${endNo}</p>
+            </div>
+            <span class="status-pill">${escapeHTML(status.label)}</span>
+          </div>
+          <div class="mini-stats">
+            <span class="chip">挑戦済み ${status.attemptedCount}/${items.length}</span>
+            <span class="chip">苦手 ${status.weakCount}問</span>
+          </div>
+          <div class="section-actions">
+            <button class="btn-primary" onclick="startSection(${sectionNumber})">解いてみる（全問）</button>
+            <button class="btn-secondary" onclick="startSectionWeak(${sectionNumber})" ${weakCount === 0 ? "disabled" : ""}>苦手のみ解く</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function startSection(sectionNumber) {
+      startQuiz(sectionItems(sectionNumber), `Section ${sectionNumber} / 全問`);
+    }
+
+    function startSectionWeak(sectionNumber) {
+      const items = weakItems(sectionItems(sectionNumber));
+      startQuiz(items, `Section ${sectionNumber} / 苦手のみ`);
+    }
+
+    function startRandom10() {
+      startQuiz(shuffle(WORDS).slice(0, 10), "全問からランダム10問");
+    }
+
+    function startAllWeak() {
+      startQuiz(weakItems(WORDS), "全体の苦手のみ");
+    }
+
+    function startQuiz(items, title) {
+      if (!items.length) {
+        showToast("苦手リストは空です。まずは全問に挑戦してみよう。");
+        return;
+      }
+
+      session = {
+        title,
+        items: [...items],
+        index: 0,
+        revealed: false,
+        correct: 0,
+        wrong: 0,
+        wrongIds: [],
+        finished: false
+      };
+      if (window.speechSynthesis) { window.speechSynthesis.cancel(); }
+      renderQuiz();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderQuiz() {
+      const item = session.items[session.index];
+      const total = session.items.length;
+      const current = session.index + 1;
+      const percent = Math.round((session.index / total) * 100);
+      const answer = item.word.toLowerCase();
+      const full = filledPhrase(item);
+
+      document.getElementById("app").innerHTML = `
+        <div class="top-bar">
+          <button class="home-btn btn-ghost" onclick="goHomeMaybe()">🏠 ホームへ戻る</button>
+        </div>
+
+        <section class="quiz-card">
+          <div class="quiz-meta">
+            <span>${escapeHTML(session.title)}</span>
+            <strong>${current} / ${total}</strong>
+          </div>
+          <div class="progress-wrap" aria-hidden="true">
+            <div class="progress-bar" style="width:${percent}%"></div>
+          </div>
+
+          <p class="hint-label">Japanese Hint</p>
+          <p class="hint">${escapeHTML(item.ja)}</p>
+
+          <p class="phrase-label">Blank Phrase</p>
+          <p class="phrase">${maskedPhraseHTML(item)}</p>
+
+          ${session.revealed ? `
+            <div class="answer-box">
+              <p class="answer-label">Answer</p>
+              <p class="answer-word">${escapeHTML(answer)}</p>
+              <p class="full-phrase">${escapeHTML(full)}</p>
+              <div class="translation-box">
+                <p class="translation-label">Japanese Translation</p>
+                <p class="translation-text">${escapeHTML(item.translation || "")}</p>
+              </div>
+            </div>
+
+            <div class="speech-panel">
+              <p class="speech-title">読み上げ速度</p>
+              <div class="rate-toggle" role="group" aria-label="読み上げ速度">
+                <button class="rate-btn ${speechRate === 1.0 ? "active" : ""}" onclick="setSpeechRate(1.0)">1.0x 標準</button>
+                <button class="rate-btn ${speechRate === 0.8 ? "active" : ""}" onclick="setSpeechRate(0.8)">0.8x 遅め</button>
+                <button class="rate-btn ${speechRate === 0.5 ? "active" : ""}" onclick="setSpeechRate(0.5)">0.5x 超ゆっくり</button>
+              </div>
+              <div class="speech-actions">
+                <button class="btn-primary" onclick="speakPhrase()">フレーズ全体</button>
+                <button class="btn-secondary" onclick="speakWord()">単語のみ</button>
+              </div>
+            </div>
+
+            <div class="judge-bar" aria-label="自己判定">
+              <button class="btn-wrong" onclick="judge(false)">❌ 違った</button>
+              <button class="btn-correct" onclick="judge(true)">⭕️ 合ってた</button>
+            </div>
+          ` : `
+            <div class="reveal-wrap">
+              <button class="btn-primary" onclick="revealAnswer()">答えを見る</button>
+            </div>
+          `}
+        </section>
+      `;
+    }
+
+    function revealAnswer() {
+      session.revealed = true;
+      renderQuiz();
+    }
+
+    function setSpeechRate(rate) {
+      speechRate = rate;
+      renderQuiz();
+    }
+
+    function speakPhrase() {
+      const item = session.items[session.index];
+      speak(filledPhrase(item));
+    }
+
+    function speakWord() {
+      const item = session.items[session.index];
+      speak(item.word.toLowerCase());
+    }
+
+    function speak(text) {
+      if (!("speechSynthesis" in window)) {
+        showToast("このブラウザでは音声読み上げに対応していません。");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      utterance.rate = speechRate;
+      utterance.pitch = 1;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function judge(isCorrect) {
+      const item = session.items[session.index];
+
+      markAnswer(item.id, isCorrect);
+
+      if (isCorrect) {
+        session.correct += 1;
+        showToast("保存しました：苦手リストから削除");
+      } else {
+        session.wrong += 1;
+        uniquePush(session.wrongIds, item.id);
+        showToast("保存しました：苦手リストに追加");
+      }
+
+      if (window.speechSynthesis) { window.speechSynthesis.cancel(); }
+
+      if (session.index + 1 >= session.items.length) {
+        session.finished = true;
+        renderResult();
+      } else {
+        session.index += 1;
+        session.revealed = false;
+        renderQuiz();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+
+    function renderResult() {
+      const total = session.items.length;
+      const weakNow = weakItems(WORDS).length;
+
+      document.getElementById("app").innerHTML = `
+        <div class="top-bar">
+          <button class="home-btn btn-ghost" onclick="renderHome()">🏠 ホームへ戻る</button>
+        </div>
+
+        <section class="result-card">
+          <p class="kicker">Session Complete</p>
+          <h2>おつかれ！</h2>
+          <p class="subtitle">判定結果はすべて保存済みです。</p>
+
+          <div class="result-score">
+            <div class="score-box">
+              <span class="score-num" style="color: var(--green);">${session.correct}</span>
+              <span>合ってた</span>
+            </div>
+            <div class="score-box">
+              <span class="score-num" style="color: var(--red);">${session.wrong}</span>
+              <span>違った</span>
+            </div>
+          </div>
+
+          <div class="empty-box">
+            今回：${total}問 / 現在の全体苦手：${weakNow}問
+          </div>
+
+          <div class="reveal-wrap">
+            ${session.wrongIds.length ? `<button class="btn-secondary" onclick="retrySessionWrong()">今回の❌だけ再挑戦</button>` : ""}
+            <button class="btn-primary" onclick="renderHome()">ホームへ戻る</button>
+          </div>
+        </section>
+      `;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function retrySessionWrong() {
+      const ids = new Set(session.wrongIds);
+      const items = WORDS.filter(item => ids.has(item.id));
+      startQuiz(items, "今回の❌だけ再挑戦");
+    }
+
+
+    function renderImportManager() {
+      session = null;
+      const sample = 'I had a [[blast]].\n（めちゃくちゃ楽しかった）\n\nThe line was so [[long]].\n（行列がめちゃくちゃ長かった）';
+
+      document.getElementById("app").innerHTML = `
+        <div class="top-bar">
+          <button class="home-btn btn-ghost" onclick="renderHome()">🏠 ホームへ戻る</button>
+        </div>
+
+        <section class="manager-card">
+          <p class="kicker">Phrase Import</p>
+          <h2>追加フレーズ管理</h2>
+          <p>
+            英語フレーズの中で穴埋めにしたい単語を <strong>[[ ]]</strong> で囲んでください。
+            既存フレーズと同じものは自動でスキップします。
+          </p>
+
+          <div class="format-box">
+            形式：<br>
+            <code>I had a [[blast]].</code><br>
+            <code>（めちゃくちゃ楽しかった）</code>
+          </div>
+
+          <textarea id="importText" class="textarea" spellcheck="false" placeholder="${escapeHTML(sample)}"></textarea>
+
+          <div class="manager-actions">
+            <button class="btn-primary" onclick="previewImportPhrases()">プレビュー / 重複チェック</button>
+            <button class="btn-secondary" onclick="addImportedPhrases()">重複を除いて追加</button>
+            <button class="btn-ghost" onclick="copyCustomPhrases()">追加済みデータをコピー</button>
+            <button class="btn-ghost" onclick="clearCustomPhrases()">自分で追加した分を削除</button>
+          </div>
+
+          <div id="importPreview" class="preview-list"></div>
+        </section>
+      `;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function stripJapaneseParen(text) {
+      return String(text || "")
+        .replace(/^（/, "")
+        .replace(/）$/, "")
+        .replace(/^\(/, "")
+        .replace(/\)$/, "")
+        .trim();
+    }
+
+    function parseImportText(text) {
+      const lines = String(text || "")
+        .split(/\n/)
+        .map(function(line) { return line.trim(); })
+        .filter(function(line) { return line && !/^[-—⸻]+$/.test(line); });
+
+      const parsed = [];
+      const errors = [];
+
+      for (let i = 0; i < lines.length; i++) {
+        const english = lines[i];
+        if (/^[（(].*[）)]$/.test(english)) continue;
+
+        let translation = "";
+        if (i + 1 < lines.length && /^[（(].*[）)]$/.test(lines[i + 1])) {
+          translation = stripJapaneseParen(lines[i + 1]);
+          i++;
+        }
+
+        const match = english.match(/\[\[([^\]]+)\]\]/);
+        if (!match) {
+          errors.push("スキップ：[[単語]] が見つかりません → " + english);
+          continue;
+        }
+
+        const answer = match[1].trim();
+        const phrase = english.replace(/\[\[[^\]]+\]\]/, "( _____ )");
+
+        if (!answer || !phrase || !translation) {
+          errors.push("スキップ：英語・日本語訳のどちらかが不足しています → " + english);
+          continue;
+        }
+
+        parsed.push({
+          word: answer.toLowerCase(),
+          ja: translation,
+          phrase: phrase,
+          translation: translation,
+          source: "カスタム追加"
+        });
+      }
+
+      return { items: parsed, errors: errors };
+    }
+
+    function classifyImportedItems(items) {
+      refreshWords();
+      const seen = {};
+      WORDS.forEach(function(item) {
+        seen[normalizePhraseKey(filledPhrase(item))] = true;
+      });
+
+      return items.map(function(item) {
+        const key = normalizePhraseKey(filledPhraseFor(item));
+        const duplicate = !!seen[key];
+        if (!duplicate) seen[key] = true;
+        return { item: item, duplicate: duplicate, key: key };
+      });
+    }
+
+    function previewImportPhrases() {
+      const textEl = document.getElementById("importText");
+      const previewEl = document.getElementById("importPreview");
+      const parsed = parseImportText(textEl.value);
+      const classified = classifyImportedItems(parsed.items);
+      const addCount = classified.filter(function(row) { return !row.duplicate; }).length;
+      const skipCount = classified.filter(function(row) { return row.duplicate; }).length;
+
+      let html = `
+        <div class="preview-item">
+          <strong>プレビュー：</strong>追加 ${addCount}件 / 重複スキップ ${skipCount}件 / 形式エラー ${parsed.errors.length}件
+        </div>
+      `;
+
+      classified.forEach(function(row) {
+        const item = row.item;
+        html += `
+          <div class="preview-item ${row.duplicate ? "skip" : ""}">
+            <strong>${row.duplicate ? "重複スキップ" : "追加予定"}</strong><br>
+            ${escapeHTML(filledPhraseFor(item))}<br>
+            <span style="color: var(--muted);">${escapeHTML(item.translation)}</span>
+          </div>
+        `;
+      });
+
+      parsed.errors.forEach(function(error) {
+        html += `<div class="preview-item skip"><strong>形式エラー</strong><br>${escapeHTML(error)}</div>`;
+      });
+
+      previewEl.innerHTML = html;
+    }
+
+    function addImportedPhrases() {
+      const textEl = document.getElementById("importText");
+      const parsed = parseImportText(textEl.value);
+      const classified = classifyImportedItems(parsed.items);
+      let added = 0;
+      let skipped = 0;
+
+      classified.forEach(function(row) {
+        if (row.duplicate) {
+          skipped++;
+          return;
+        }
+        const item = row.item;
+        item.id = "custom:" + hashString(row.key);
+        customPhrases.push(item);
+        added++;
+      });
+
+      saveCustomPhrases();
+      refreshWords();
+      showToast(`追加 ${added}件 / 重複スキップ ${skipped}件`);
+      previewImportPhrases();
+    }
+
+    function copyCustomPhrases() {
+      const text = JSON.stringify(customPhrases, null, 2);
+      if (!customPhrases.length) {
+        showToast("コピーできる追加データがありません。");
+        return;
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function() {
+          showToast("追加済みデータをコピーしました。");
+        }).catch(function() {
+          showToast("コピーに失敗しました。画面の共有メニューを使ってください。");
+        });
+      } else {
+        showToast("このブラウザではコピーに対応していません。");
+      }
+    }
+
+    function clearCustomPhrases() {
+      if (!customPhrases.length) {
+        showToast("自分で追加したフレーズはありません。");
+        return;
+      }
+      const ok = confirm("自分で追加したフレーズをすべて削除しますか？\n基本データと英語部Day1〜Day10追加分は消えません。");
+      if (!ok) return;
+      customPhrases = [];
+      saveCustomPhrases();
+      refreshWords();
+      showToast("自分で追加したフレーズを削除しました。");
+      renderHome();
+    }
+
+
+    function goHomeMaybe() {
+      if (session && !session.finished && session.index < session.items.length) {
+        const ok = confirm("途中でホームへ戻りますか？\n⭕️/❌を押した分は保存済みです。");
+        if (!ok) return;
+      }
+      if (window.speechSynthesis) { window.speechSynthesis.cancel(); }
+      renderHome();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("show"), 1300);
+    }
+
+    try {
+      refreshWords();
+      renderHome();
+    } catch (error) {
+      document.getElementById("app").innerHTML =
+        '<section class="hero">' +
+        '<p class="kicker">Startup Error</p>' +
+        '<h1>読み込みに失敗しました</h1>' +
+        '<p class="subtitle">iPhone側のブラウザでJavaScriptの初期化に失敗しました。別ブラウザで開くか、再読み込みしてください。</p>' +
+        '<pre style="white-space:pre-wrap;color:#ffe75e;font-size:12px;">' + escapeHTML(error.message || String(error)) + '</pre>' +
+        '</section>';
+    }
+  </script>
+</body>
+</html>
